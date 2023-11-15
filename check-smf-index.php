@@ -54,6 +54,9 @@ try
 }
 catch (Exception $e)
 {
-	fwrite(STDERR, $e->getMessage());
-	exit(1);
+	print($e->getMessage());
+	exit(0);
+
+//	fwrite(STDERR, $e->getMessage());
+//	exit(1);
 }
