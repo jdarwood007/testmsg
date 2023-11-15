@@ -18,7 +18,7 @@ jobs:
     - name: Run Script
       run: |
         OUTPUT=$(php ./check-smf-index.php)
-        echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
+        echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV >> $GITHUB_STEP_SUMMARY
 
     - name: Post result to PR
       uses: mshick/add-pr-comment@v1
@@ -31,11 +31,4 @@ jobs:
     - name: Fail If we had a message
       if: ${{ env.MESSAGE }} != ${{ '' }}
       run: |
-        core.setFailed('setFailed')
-        echo "::error::TEST"
         exit 1
-        
-    - name: use error detail on failure
-      if: ${{ failure() }}
-      run: |
-        echo ${{ steps.maybe_fails.outputs.MESSAGE }}
