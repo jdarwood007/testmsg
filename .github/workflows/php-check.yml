@@ -22,7 +22,7 @@ jobs:
 
     - name: Post result to PR
       uses: mshick/add-pr-comment@v1
-      if: ${{ env.MESSAGE }} != ${{ '' }}
+      if: ${{ env.MESSAGE }} != ''
       with:
         message: ${{ env.MESSAGE }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -30,6 +30,6 @@ jobs:
         allow-repeats: true # This is the default
 
     - name: Fail If we had a message
-      if: ${{ env.MESSAGE }} != ${{ '' }}
+      if: ${{ env.MESSAGE }} != ''
       run: |
         exit 1
