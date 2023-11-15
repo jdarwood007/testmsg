@@ -50,12 +50,12 @@ try
 		if (!file_exists($currentDirectory . '/index.php'))
 		{
 			$errors = true;
-			print('Index file missing in ' . $currentDirectory . PHP_EOL);
+			print('Index file missing in ' . $currentDirectory . "\r");
 		}
 		else if (file_get_contents($currentDirectory . '/index.php') != $contents)
 		{
 			$errors = true;
-			print('Index content does not match in ' . $currentDirectory . PHP_EOL);
+			print('Index content does not match in ' . $currentDirectory . "\r");
 		}
 	}
 
