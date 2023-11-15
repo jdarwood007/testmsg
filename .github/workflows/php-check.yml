@@ -31,5 +31,11 @@ jobs:
     - name: Fail If we had a message
       if: ${{ env.MESSAGE }} != ${{ '' }}
       run: |
-        echo "::error::'${{ env.MESSAGE }}'"
+        core.setFailed('setFailed')
+        echo "::error::TEST"
         exit 1
+        
+    - name: use error detail on failure
+      if: ${{ failure() }}
+      run: |
+        echo ${{ steps.maybe_fails.outputs.MESSAGE }}
