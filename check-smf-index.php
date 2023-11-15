@@ -29,6 +29,8 @@ else
 ?>
 END;
 
+$errors = false;
+
 try
 {
 	$iter = new RecursiveIteratorIterator(
@@ -46,17 +48,23 @@ try
 				continue 2;
 
 		if (!file_exists($currentDirectory . '/index.php'))
-			throw new Exception('Index file missing in ' . $currentDirectory);
-
-		if (file_get_contents($currentDirectory . '/index.php') != $contents)
-			throw new Exception('Index content does not match in ' . $currentDirectory);
+		{
+			$errors = true;
+			print('Index file missing in ' . $currentDirectory);
+		}
+		else if (file_get_contents($currentDirectory . '/index.php') != $contents)
+		{
+			$errors = true;
+			print('Index content does not match in ' . $currentDirectory);
+		}
 	}
+
+	exit($errors ? 1 : 0);
 }
 catch (Exception $e)
 {
-	print($e->getMessage());
-	exit(0);
-
-//	fwrite(STDERR, $e->getMessage());
-//	exit(1);
+	fwrite(STDERR, $e->getMessage() . 'STDERR');
+	fwrite(STDOUT, $e->getMessage()) . 'STDOUT';
+	print($e->getMessage()) . 'PRINT';
+	exit(1);
 }
