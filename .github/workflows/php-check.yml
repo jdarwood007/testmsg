@@ -29,7 +29,7 @@ jobs:
         allow-repeats: false # This is the default
 
     - name: Fail If we had a message
-    if: ${{ env.MESSAGE }} != ${{ '' }}
-    run: |
-      echo ${{ env.MESSAGE }}
-      exit 1
+      if: ${{ env.MESSAGE }} != ${{ '' }}
+      run: |
+        echo ${{ env.MESSAGE }}
+        exit 1
