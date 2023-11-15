@@ -63,7 +63,8 @@ try
 }
 catch (Exception $e)
 {
-//	fwrite(STDERR, $e->getMessage());
-	print($e->getMessage());
+	fwrite(STDERR, $e->getMessage() . 'STDERR');
+	fwrite(STDOUT, $e->getMessage()) . 'STDOUT';
+	print($e->getMessage()) . 'PRINT';
 	exit(1);
 }
