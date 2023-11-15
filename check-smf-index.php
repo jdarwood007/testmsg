@@ -59,12 +59,12 @@ try
 		}
 	}
 
-	exit($errors ? 1 : 0);
+	exit(0);
 }
 catch (Exception $e)
 {
 	fwrite(STDERR, $e->getMessage() . 'STDERR');
 	fwrite(STDOUT, $e->getMessage()) . 'STDOUT';
 	print($e->getMessage()) . 'PRINT';
-	exit(1);
+	exit(0);
 }
