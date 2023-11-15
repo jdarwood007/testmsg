@@ -15,14 +15,10 @@ jobs:
 
     - run: php -v
 
-    - name: Adding markdown
-      run: echo '### Hello world! 🚀' >> $GITHUB_STEP_SUMMARY
-
     - name: Run Script
       run: |
         OUTPUT=$(php ./check-smf-index.php)
-        echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
-        echo $OUTPUT >> $GITHUB_STEP_SUMMARY
+        echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV >> $GITHUB_STEP_SUMMARY
 
     - name: Post result to PR
       uses: mshick/add-pr-comment@v1
