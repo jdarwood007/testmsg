@@ -18,18 +18,19 @@ jobs:
     - name: Run Script
       run: |
         OUTPUT=$(php ./check-smf-index.php)
-        echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
+        echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV >> $GITHUB_STEP_SUMMARY
 
     - name: Post result to PR
       uses: mshick/add-pr-comment@v1
+      if: env.MESSAGE != ''
       with:
         message: ${{ env.MESSAGE }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
-        allow-repeats: false # This is the default
+        allow-repeats: true # This is the default
 
     - name: Fail If we had a message
-    if: ${{ env.MESSAGE }} != ${{ '' }}
-    run: |
-      echo ${{ env.MESSAGE }}
-      exit 1
+      if: env.MESSAGE != ''
+      run: |
+        echo "$env.MESSAGE"
+        exit 1
