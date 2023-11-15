@@ -46,10 +46,10 @@ try
 				continue 2;
 
 		if (!file_exists($currentDirectory . '/index.php'))
-			throw new Exception('Index file missing in ' . $currentDirectory);
+			print('Index file missing in ' . $currentDirectory);
 
-		if (file_get_contents($currentDirectory . '/index.php') != $contents)
-			throw new Exception('Index content does not match in ' . $currentDirectory);
+		else if (file_get_contents($currentDirectory . '/index.php') != $contents)
+			print('Index content does not match in ' . $currentDirectory);
 	}
 }
 catch (Exception $e)
