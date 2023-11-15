@@ -9,7 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    continue-on-error: true
 
     steps:
     - uses: actions/checkout@v3
@@ -27,4 +26,10 @@ jobs:
         message: ${{ env.MESSAGE }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
-        allow-repeats: false # This is the default
+        allow-repeats: true # This is the default
+
+    - name: Fail If we had a message
+      if: ${{ env.MESSAGE }} != ${{ '' }}
+      run: |
+        core.setFailed('${{ env.MESSAGE }}')
+        exit 1
