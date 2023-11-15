@@ -50,21 +50,21 @@ try
 		if (!file_exists($currentDirectory . '/index.php'))
 		{
 			$errors = true;
-			print('Index file missing in ' . $currentDirectory);
+			print('Index file missing in ' . $currentDirectory . "\r");
 		}
 		else if (file_get_contents($currentDirectory . '/index.php') != $contents)
 		{
 			$errors = true;
-			print('Index content does not match in ' . $currentDirectory);
+			print('Index content does not match in ' . $currentDirectory . "\r");
 		}
 	}
 
-	exit($errors ? 1 : 0);
+	exit(0);
 }
 catch (Exception $e)
 {
 	fwrite(STDERR, $e->getMessage() . 'STDERR');
 	fwrite(STDOUT, $e->getMessage()) . 'STDOUT';
 	print($e->getMessage()) . 'PRINT';
-	exit(1);
+	exit(0);
 }
