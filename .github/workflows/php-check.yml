@@ -31,5 +31,5 @@ jobs:
     - name: Fail If we had a message
       if: ${{ env.MESSAGE }} != ${{ '' }}
       run: |
-        core.setFailed('${{ env.MESSAGE }}')
+        echo "::error::'${{ env.MESSAGE }}'"
         exit 1
