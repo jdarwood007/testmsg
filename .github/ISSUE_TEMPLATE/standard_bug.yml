@@ -1,0 +1,72 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug", "triage"]
+projects: ["octo-org/1", "octo-org/44"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report, please complete as much as possible.
+  - type: textarea
+    id: basic
+    attributes:
+      label: Basic Information
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you see!
+      value: "A bug happened!"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Describe all steps needed to recreate the issue.
+  - type: input
+    id: version
+    attributes:
+      label: Version/Git revision
+      description: What SMF Version are you using? If using a git version, please indicate which revision you used.
+      placeholder: 3.0 Alpha 1
+    validations:
+      required: true
+  - type: dropdown
+    id: databasetype
+    attributes:
+      label: Database Engine
+      description: What Database Engine are you running
+      options:
+        - MySQL
+        - PostgreSQL
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: databaseversion
+    attributes:
+      label: Database Version
+      description: Your database version (Try running the query: `SELECT version();`
+      placeholder: 8.0
+    validations:
+      required: true
+  - type: input
+    id: databaseversion
+    attributes:
+      label: PHP Version
+      description: Your PHP version
+      placeholder: 8.2
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Add any logs that may be useful.
+      description: Any log data
+      render: shell
+  - type: textarea
+    id: additional
+    attributes:
+      label: Any additional information
+      description: Add any refernces, RFCs or other information which may be useful.
