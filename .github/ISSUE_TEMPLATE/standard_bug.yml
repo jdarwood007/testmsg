@@ -48,13 +48,13 @@ body:
     attributes:
       label: Database Version
       description: Your database version
-      placeholder: 8.0
+      placeholder: 8.0.1-MySQL
   - type: input
     id: phpversion
     attributes:
       label: PHP Version
       description: Your PHP version
-      placeholder: 8.2
+      placeholder: 8.2.0-PHP
   - type: textarea
     id: logs
     attributes:
