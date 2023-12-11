@@ -49,16 +49,12 @@ body:
       label: Database Version
       description: Your database version
       placeholder: 8.0
-    validations:
-      required: true
   - type: input
     id: phpversion
     attributes:
       label: PHP Version
       description: Your PHP version
       placeholder: 8.2
-    validations:
-      required: true
   - type: textarea
     id: logs
     attributes:
