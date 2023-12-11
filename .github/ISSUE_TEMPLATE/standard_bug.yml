@@ -47,7 +47,7 @@ body:
     id: databaseversion
     attributes:
       label: Database Version
-      description: Your database version (Try running the query: `SELECT version();`
+      description: Your database version
       placeholder: 8.0
     validations:
       required: true
