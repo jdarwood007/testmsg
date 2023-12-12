@@ -13,6 +13,13 @@ body:
     attributes:
       label: Basic Information
       description: What happened, or unexpectly happened?
+      value: |
+        # Expected behaviour:
+        -------------------
+
+        # Actual behaviour:
+        -------------------
+
     validations:
       required: true
   - type: textarea
@@ -21,8 +28,8 @@ body:
       label: Steps to reproduce
       description: Describe all steps needed to recreate the issue.
       value: |
-        1. 
-        2. 
+        1.
+        2.
   - type: input
     id: version
     attributes:
@@ -37,6 +44,7 @@ body:
       label: Database Engine
       description: What Database Engine are you running
       options:
+        - All
         - MySQL
         - PostgreSQL
       default: 0
