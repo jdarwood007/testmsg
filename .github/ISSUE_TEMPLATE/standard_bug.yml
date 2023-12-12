@@ -1,5 +1,5 @@
 name: Bug Report
-description: File a bug report
+description: File a normal bug report
 title: "[3.0]: "
 labels: ["Not Verified"]
 projects: ["SimpleMachines/2"]
@@ -7,13 +7,12 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report, please complete as much as possible.
+        Thanks for taking the time to fill out this bug report, please complete as much as possible.  If this is security related, please fill out a [Security Report](https://www.simplemachines.org/about/smf/security.php)
   - type: textarea
     id: basic
     attributes:
       label: Basic Information
-      description: Also tell us, what did you expect to happen?
-      placeholder: Tell us what you see!
+      description: What happened, or unexpectly happened?
     validations:
       required: true
   - type: textarea
@@ -44,22 +43,24 @@ body:
     id: databaseversion
     attributes:
       label: Database Version
-      description: Your database version
-      placeholder: 8.0.1-MySQL
+      description: |
+        Your database version
+        You mabe be able to runt he following query: `SELECT version();` to get this.
+      placeholder: '8.0.1-MySQL'
   - type: input
     id: phpversion
     attributes:
       label: PHP Version
       description: Your PHP version
-      placeholder: 8.2.0-PHP
+      placeholder: '8.2.0'
   - type: textarea
     id: logs
     attributes:
-      label: Add any logs that may be useful.
-      description: Any log data
+      label: Logs
+      description: Add any additional logs that may be useful, such as PHP error logs, SMF error logs, Database logs, Web Server logs
       render: shell
   - type: textarea
     id: additional
     attributes:
-      label: Any additional information
+      label: Additional Information
       description: Add any refernces, RFCs or other information which may be useful.
