@@ -21,8 +21,8 @@ body:
       label: Steps to reproduce
       description: Describe all steps needed to recreate the issue.
       value: |
-        - 
-        - 
+        -
+        -
   - type: input
     id: version
     attributes:
