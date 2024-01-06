@@ -48,6 +48,7 @@ jobs:
       with:
         php-cs-fixer-version: "v3.46.0"
         use-built-in-rules: false
+        only-check-modified-files: true
 
     - name: TEST
       run: |
