@@ -136,9 +136,7 @@ function find_gpg($commit = 'HEAD', $childs = array())
 	debugPrint('Attempting to Find GPG on commit ' . $commit);
 
 	// Get verify commit data.
-	$data = shell_exec('git verify-commit ' . $commit . ' -v --raw');
-	var_dump('git verify-commit ' . $commit . ' -v --raw', $data);
-	$message = trim($data);
+	$message = trim(shell_exec('git verify-commit ' . $commit . ' -v --raw') ?? '');
 
 	// Should we actually test for gpg results?  Perhaps, but it seems doing that with travis may fail since it has no way to verify a GPG signature from GitHub.  GitHub should have prevented a bad GPG from making a commit to a authors repository and could be trusted in most cases it seems.
 	$result = strlen($message) > 0;
@@ -146,7 +144,7 @@ function find_gpg($commit = 'HEAD', $childs = array())
 	// Debugger.
 	$debugMsgs = array(
 		// Raw body.
-		'verify-commit' => '"' . rtrim(shell_exec('git verify-commit ' . $commit . ' -v --raw') ) . '"',
+		'verify-commit' => '"' . rtrim(shell_exec('git verify-commit ' . $commit . ' -v --raw') ?? '') . '"',
 		// Result.
 		'result' => '"' . $result . '"',
 		// Last tested string, or the correct string.
