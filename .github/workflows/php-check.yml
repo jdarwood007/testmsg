@@ -19,7 +19,6 @@ jobs:
       run: |
         php ./check-signed-off.php > check-signed-off.txt 2>&1
         echo "OUTPUT=$(cat check-signed-off.txt)\n" >> $GITHUB_OUTPUT
-        echo "$GITHUB_OUTPUT" >> $GITHUB_STEP_SUMMARY
     
     - name: Post result to PR
       uses: mshick/add-pr-comment@v1
