@@ -23,12 +23,16 @@ try
 	$signedoff = find_signed_off();
 
 	// Now Try to test for the GPG if we don't have a message.
-	if (empty($signedoff))
+	if (empty($signedoff)) {
+		debugPrint("Standard Sign off missing, checking GPG");
 		$signedoff = find_gpg();
+	}
 
 	// Nothing yet?  Lets ask your parents.
-	if (empty($signedoff) && isset($_SERVER['argv'], $_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'travis')
+	if (empty($signedoff) && isset($_SERVER['argv'], $_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'travis') {
+		debugPrint("No sign off found, check parents.");
 		$signedoff = find_signed_off_parents();
+	}
 
 	if (DEBUG_MODE)
 		debugPrint("--- DEBUG MSGS END ---");
@@ -49,10 +53,14 @@ catch (Exception $e)
 	print($e->getMessage()) . 'PRINT';
 	exit(0);
 }
+
 // Find a commit by Signed Off
 function find_signed_off($commit = 'HEAD', $childs = array(), $level = 0)
 {
-	$commit = trim($commit);
+	if (empty($commit)) {
+		debugPrint('Commit is empty');
+		exit(0);
+	}
 
 	// Where we are at.
 	debugPrint('Attempting to find signed off on commit ' . $commit);
@@ -120,7 +128,10 @@ function find_signed_off($commit = 'HEAD', $childs = array(), $level = 0)
 // Find a commit by GPG
 function find_gpg($commit = 'HEAD', $childs = array())
 {
-	$commit = trim($commit);
+	if (empty($commit)) {
+		debugPrint('Commit is empty');
+		exit(0);
+	}
 
 	debugPrint('Attempting to Find GPG on commit ' . $commit);
 
@@ -147,6 +158,11 @@ function find_gpg($commit = 'HEAD', $childs = array())
 // Looks at all the parents, and tries to find a signed off by somewhere.
 function find_signed_off_parents($commit = 'HEAD')
 {
+	if (empty($commit)) {
+		debugPrint('Commit is empty');
+		exit(0);
+	}
+
 	$commit = trim($commit);
 
 	debugPrint('Attempting to find parents on commit ' . $commit);
@@ -178,6 +194,6 @@ function find_signed_off_parents($commit = 'HEAD')
 // Print a debug line
 function debugPrint($msg)
 {
-	if (DEBUG_MODE)
+//	if (DEBUG_MODE)
 		echo $msg, "\n";
 }
