@@ -21,18 +21,19 @@ jobs:
         echo 'var<<EOF' >> $GITHUB_OUTPUT
         echo "$(cat check-signed-off.txt)\n" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
-    
+        cat check-signed-off.txt
+  
     - name: Post result to PR
       uses: mshick/add-pr-comment@v1
-      if: env.OUTPUT != ''
+      if: env.GITHUB_OUTPUT != ''
       with:
-        message-path: ${{ env.OUTPUT }}
+        message-path: ${{ env.GITHUB_OUTPUT }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
         allow-repeats: true # This is the default
 
     - name: Fail If we had a message
-      if: env.OUTPUT != ''
+      if: env.GITHUB_OUTPUT != ''
       run: |
-        echo "$env.OUTPUT"
+        echo "$env.GITHUB_OUTPUT"
         exit 1
