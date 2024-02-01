@@ -17,10 +17,14 @@ jobs:
 
     - name: Run Script
       run: |
-        OUTPUT=$(php ./check-signed-off.php)
+        php ./check-signed-off.php > check-signed-off.txt 2>&1
         echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
         echo "$OUTPUT" >> $GITHUB_STEP_SUMMARY
 
+    - name: Get coverage output
+      id: get_coverage
+      run: echo "::set-output name=coverage::$(check-signed-off.txt)"
+    
     - name: Post result to PR
       uses: mshick/add-pr-comment@v1
       if: env.MESSAGE != ''
