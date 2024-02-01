@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  linter:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
 
     - name: Run Script
       run: |
-        OUTPUT=$(php ./check-smf-index.php)
+        OUTPUT=$(php ./check-signed-off.php)
         echo "MESSAGE=$OUTPUT" >> $GITHUB_ENV
         echo "$OUTPUT" >> $GITHUB_STEP_SUMMARY
 
