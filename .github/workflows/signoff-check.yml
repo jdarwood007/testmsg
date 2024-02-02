@@ -21,7 +21,11 @@ jobs:
         echo 'var<<EOF' >> $GITHUB_OUTPUT
         echo "$(cat check-signed-off.txt)\n" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
+        echo '====================check-signed-off======================'
         cat check-signed-off.txt
+        echo '====================git log======================'
+        git --no-pager log -n2
+        echo '=========================================='
   
     - name: Post result to PR
       uses: mshick/add-pr-comment@v1
