@@ -175,7 +175,7 @@ function find_signed_off_parents(string $commit = 'HEAD'): bool
 	// Test each one.
 	foreach ($parents as $parent)
 	{
-		$p = trim($p);
+		$parent = trim($parent);
 		debugPrint('Testing parent(' . $commit. ') for commit ' . $parent . ' for signed off or GPG');
 
 		// Basic tests.
@@ -184,6 +184,10 @@ function find_signed_off_parents(string $commit = 'HEAD'): bool
 		// No, maybe it has a GPG parent.
 		if (empty($result)) {
 			$result = find_gpg($parent);
+		}
+		
+		if ($result) {
+			return $result;
 		}
 	}
 
