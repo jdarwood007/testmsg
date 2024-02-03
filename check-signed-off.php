@@ -8,55 +8,63 @@
  * @copyright 2024 Simple Machines and individual contributors
  * @license https://www.simplemachines.org/about/smf/license.php BSD
  *
- * @version 3.0 Alpha 1
+ * @version 3.0
  */
 
 // Debug stuff.
-define('DEBUG_MODE', true);
+define('DEBUG_MODE', false);
 
-if (DEBUG_MODE) {
+try
+{
 	debugPrint("--- DEBUG MSGS START ---");
-}
 
-// First, lets do a basic test.  This is non GPG signed commits.
-$signedoff = find_signed_off();
+	// First, lets do a basic test.  This is non GPG signed commits.
+	$signedoff = find_signed_off();
 
-// Now Try to test for the GPG if we don't have a message.
-if (empty($signedoff)) {
-	$signedoff = find_gpg();
-}
-
-// Nothing yet?  Lets ask your parents.
-if (empty($signedoff) && isset($_SERVER['argv'], $_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'travis') {
-	$signedoff = find_signed_off_parents();
-}
-
-if (DEBUG_MODE) {
-	debugPrint("--- DEBUG MSGS END ---");
-}
-
-// Nothing?  Well darn.
-if (empty($signedoff)) {
-	if (DEBUG_MODE) {
-		debugPrint('Searched all locations and no signature found');
+	// Now Try to test for the GPG if we don't have a message.
+	if (empty($signedoff)) {
+		debugPrint("Standard Sign off missing, checking GPG");
+		$signedoff = find_gpg();
 	}
 
-	fwrite(STDERR, 'Error: Signed-off-by not found in commit message');
-	exit(1);
-}
-elseif (DEBUG_MODE) {
+	// Nothing yet?  Lets ask your parents.
+	if (empty($signedoff) && isset($_SERVER['argv'], $_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'travis') {
+		debugPrint("No sign off found, check parents.");
+		$signedoff = find_signed_off_parents();
+	}
+
+	debugPrint("--- DEBUG MSGS END ---");
+
+	// Nothing?  Well darn.
+	if (empty($signedoff)) {
+		fwrite(STDERR, 'Error: Signed-off-by not found in commit message');
+		exit(1);
+	}
+
 	debugPrint('Valid signed off found');
+}
+catch (Exception $e)
+{
+	fwrite(STDERR, $e->getMessage() . 'STDERR');
+	fwrite(STDOUT, $e->getMessage()) . 'STDOUT';
+	print($e->getMessage()) . 'PRINT';
+	exit(0);
 }
 
 // Find a commit by Signed Off
-function find_signed_off($commit = 'HEAD', $childs = array(), $level = 0) {
-	$commit = trim($commit);
+function find_signed_off(string $commit = 'HEAD', array $childs = [], int $level = 0): bool
+{
+	if (empty($commit)) {
+		debugPrint('Commit is empty');
+		exit(0);
+	}
 
 	// Where we are at.
 	debugPrint('Attempting to find signed off on commit ' . $commit);
 
 	// To many recrusions here.
-	if ($level > 10) {
+	if ($level > 10)
+	{
 		debugPrint('Recusion limit exceeded on find_signed_off');
 		return false;
 	}
@@ -74,13 +82,15 @@ function find_signed_off($commit = 'HEAD', $childs = array(), $level = 0) {
 
 	// loop through each test and find one.
 	$result = false;
-	foreach ($stringTests as $testedString) {
+	foreach ($stringTests as $testedString)
+	{
 		debugPrint('Testing "' . $testedString . '"');
 
 		$result = stripos($lastLine, $testedString);
 
 		// We got a result.
-		if ($result !== false) {
+		if ($result !== false)
+		{
 			debugPrint('Found "' . $testedString . '"');
 			break;
 		}
@@ -102,36 +112,40 @@ function find_signed_off($commit = 'HEAD', $childs = array(), $level = 0) {
 
 
 	// No result and found a merge? Lets go deeper.
-	if ($result === false && preg_match('~Merge ([A-Za-z0-9]{40}) into ([A-Za-z0-9]{40})~i', $lastLine, $merges)) {
+	if ($result === false && preg_match('~Merge ([A-Za-z0-9]{40}) into ([A-Za-z0-9]{40})~i', $lastLine, $merges))
+	{
 		debugPrint('Found Merge, attempting to get more parent commit: ' . $merges[1]);
 
-		return find_signed_off($merges[1], array_merge([$merges[1]], $childs), ++$level);
+		return find_signed_off($merges[1], array_merge(array($merges[1]), $childs), ++$level);
 	}
 
-	if (DEBUG_MODE) {
-		debugPrint(($result ? 'Found signature for commit:' : 'Unable to find signature on commit: ') . $commit);
-	}
-
-	return $result;
+	return $result !== false;
 }
 
 // Find a commit by GPG
-function find_gpg($commit = 'HEAD', $childs = [])
+function find_gpg(string $commit = 'HEAD', array $childs = []): bool
 {
-	$commit = trim($commit);
+	if (empty($commit)) {
+		debugPrint('Commit is empty');
+		exit(0);
+	}
 
 	debugPrint('Attempting to Find GPG on commit ' . $commit);
+	$result = false;
 
 	// Get verify commit data.
-	$message = trim(shell_exec('git verify-commit ' . $commit . ' -v --raw 2>&1') ?? '');
+	$message = trim(shell_exec('git verify-commit ' . $commit . ' --raw 2>&1') ?? '');
 
 	// Should we actually test for gpg results?  Perhaps, but it seems doing that with travis may fail since it has no way to verify a GPG signature from GitHub.  GitHub should have prevented a bad GPG from making a commit to a authors repository and could be trusted in most cases it seems.
-	$result = strlen($message) > 0;
+	if (strpos($message, 'GOODSIG') !== false && strpos($message, 'VALIDSIG') !== false) {
+		debugPrint('We found a valid GPG signature');	
+		$result = true;
+	}
 
 	// Debugger.
 	$debugMsgs = [
 		// Raw body.
-		'verify-commit' => '"' . rtrim(shell_exec('git verify-commit ' . $commit . ' -v --raw 2>&1') ?? '') . '"',
+		'verify-commit' => '"' . rtrim(shell_exec('git verify-commit ' . $commit . ' --raw -v 2>&1') ?? '') . '"',
 		// Result.
 		'result' => '"' . $result . '"',
 		// Last tested string, or the correct string.
@@ -139,17 +153,19 @@ function find_gpg($commit = 'HEAD', $childs = [])
 	];
 	debugPrint('Commit ' . $commit . ' at time ' . time() . ": " . rtrim(print_r($debugMsgs, true)));
 
-	if (DEBUG_MODE) {
-		debugPrint(($result ? 'Found GPG for commit:' : 'Unable to find GPG on commit: ') . $commit);
-	}
-
 	return $result;
 }
 
 // Looks at all the parents, and tries to find a signed off by somewhere.
-function find_signed_off_parents($commit = 'HEAD')
+function find_signed_off_parents(string $commit = 'HEAD'): bool
 {
+	if (empty($commit)) {
+		debugPrint('Commit is empty');
+		exit(0);
+	}
+
 	$commit = trim($commit);
+	$result = false;
 
 	debugPrint('Attempting to find parents on commit ' . $commit);
 
@@ -157,29 +173,22 @@ function find_signed_off_parents($commit = 'HEAD')
 	$parents = explode(' ', $parentsRaw);
 
 	// Test each one.
-	foreach ($parents as $p) {
+	foreach ($parents as $p)
+	{
 		$p = trim($p);
 		debugPrint('Testing parent of ' . $commit . ' for signed off');
 
 		// Basic tests.
-		$test = find_signed_off($p);
+		$result = find_signed_off($p);
 
 		// No, maybe it has a GPG parent.
-		if (empty($test)) {
-			$test = find_gpg($p);
+		if (empty($result)) {
+			$result = find_gpg($p);
 		}
-
-		if (!empty($test)) {
-			return $test;
-		}
-	}
-
-	if (DEBUG_MODE) {
-		debugPrint('Searched yieled no results for parents of commit:' . $commit);
 	}
 
 	// Lucked out.
-	return false;
+	return $result;
 }
 
 // Print a debug line
