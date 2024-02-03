@@ -21,33 +21,28 @@ define('DEBUG_MODE', false);
  */
 define('SIGN_OFF_STRINGS', ['Signed-off-by:', 'Signed by']);
 
-try
-{
+try {
 	writeDebug('# Check Sign off');
 
 	$result = parseCommit('HEAD');
 
 	writeDebug('---', '### Result');
 
-	if ($result !== '')
-	{
+	if ($result !== '') {
 		writeDebug('Found a valid sign off in commit: ' . $result);
-	} else
-	{
+	} else {
 		fwrite(STDERR, 'No valid sign off was found in your commit, please sign off commits.');
 	}
 
 	// Send debugging information out.
 	if ((bool) DEBUG_MODE === true) {
-		writeDebug('---', '### Debugging information', '```');		
+		writeDebug('---', '### Debugging information', '```');
 		print_r($GLOBALS['debugger']);
 		writeDebug('```');
 	}
 
 	exit(0);
-}
-catch (Exception $e)
-{
+} catch (Exception $e) {
 	fwrite(STDERR, $e->getMessage());
 
 	// This is a fatal error, exit so CI stops.
@@ -64,10 +59,11 @@ function parseCommit(string $hash, int $level = 0): string
 	// No hash found, abort.
 	if (strlen($hash) === 0) {
 		writeDebug('## ERROR', 'Received invalid git hash');
+
 		return '';
-	} else {
-		writeDebug('## Checking: ' . $hash);
 	}
+		writeDebug('## Checking: ' . $hash);
+
 
 	// Build the regex up.
 	if (empty($regex)) {
@@ -155,6 +151,7 @@ function parseCommit(string $hash, int $level = 0): string
 	*/
 
 	writeDebug('*Compelted checks, no sign offs found*');
+
 	return '';
 }
 
