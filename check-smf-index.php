@@ -18,16 +18,16 @@ $ignoreIndexFiles = [
 ];
 
 $contents = <<<END
-<?php
+	<?php
 
-// Try to handle it with the upper level index.php. (it should know what to do.)
-if (file_exists(dirname(__DIR__) . '/index.php'))
-	include (dirname(__DIR__) . '/index.php');
-else
-	exit;
+	// Try to handle it with the upper level index.php. (it should know what to do.)
+	if (file_exists(dirname(__DIR__) . '/index.php'))
+		include (dirname(__DIR__) . '/index.php');
+	else
+		exit;
 
-?>
-END;
+	?>
+	END;
 
 $errors = false;
 
@@ -36,35 +36,34 @@ try
 	$iter = new RecursiveIteratorIterator(
 		new RecursiveDirectoryIterator('.', RecursiveDirectoryIterator::SKIP_DOTS),
 		RecursiveIteratorIterator::SELF_FIRST,
-		RecursiveIteratorIterator::CATCH_GET_CHILD
+		RecursiveIteratorIterator::CATCH_GET_CHILD,
 	);
 
 	foreach ($iter as $currentDirectory => $dir) {
-		if (!$dir->isDir())
+		if (!$dir->isDir()) {
 			continue;
+		}
 
-		foreach ($ignoreIndexFiles as $if)
-			if (preg_match('~' . $if . '~i', $currentDirectory))
+		foreach ($ignoreIndexFiles as $if) {
+			if (preg_match('~' . $if . '~i', $currentDirectory)) {
 				continue 2;
+			}
+		}
 
-		if (!file_exists($currentDirectory . '/index.php'))
-		{
+		if (!file_exists($currentDirectory . '/index.php')) {
 			$errors = true;
 			print('Index file missing in ' . $currentDirectory . "\r");
-		}
-		else if (file_get_contents($currentDirectory . '/index.php') != $contents)
-		{
+		} elseif (file_get_contents($currentDirectory . '/index.php') != $contents) {
 			$errors = true;
 			print('Index content does not match in ' . $currentDirectory . "\r");
 		}
 	}
 
 	exit(0);
-}
-catch (Exception $e)
-{
+} catch (Exception $e) {
 	fwrite(STDERR, $e->getMessage() . 'STDERR');
 	fwrite(STDOUT, $e->getMessage()) . 'STDOUT';
 	print($e->getMessage()) . 'PRINT';
+
 	exit(0);
 }
