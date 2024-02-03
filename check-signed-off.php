@@ -14,6 +14,7 @@
 /*
  * Enable debugging of the script.
  */
+
 define('DEBUG_MODE', true);
 
 /*
