@@ -77,7 +77,7 @@ function parseCommit(string $hash, int $level = 0): string
 	$debugger[$hash] ??= [];
 	$data = &$debugger[$hash];
 	$data = [
-		'msg' => gitCmd('log --graph --abbrev-commit --decorate --first-parent --no-merges -n1 --show-signature ' . $hash),
+		'msg' => gitCmd('log --graph --abbrev-commit --decorate --no-merges -n1 --show-signature ' . $hash),
 		'hash' => gitCmd('show -s --format=%H ' . $hash),
 		'tree' => gitCmd('show -s --format=%T ' . $hash),
 		'parent' => gitCmd('show -s --format=%P ' . $hash),
