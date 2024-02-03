@@ -1,4 +1,9 @@
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - release-2.1
+  pull_request:
+
 name: Main
 jobs:
   php-cs-fixer:
