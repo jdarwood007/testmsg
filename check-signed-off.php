@@ -14,7 +14,7 @@
 /*
  * Enable debugging of the script.
  */
-define('DEBUG_MODE', true);
+define('DEBUG_MODE', false);
 
 /*
  * All the strings we search for.
