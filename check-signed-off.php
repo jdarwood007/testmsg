@@ -28,7 +28,7 @@ try
 	}
 
 	// Nothing yet?  Lets ask your parents.
-	if (empty($signedoff) && isset($_SERVER['argv'], $_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'travis') {
+	if (empty($signedoff)) {
 		debugPrint("No sign off found, check parents.");
 		$signedoff = find_signed_off_parents();
 	}
