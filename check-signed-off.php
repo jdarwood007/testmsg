@@ -29,7 +29,7 @@ try
 
 	// Nothing yet?  Lets ask your parents.
 	if (empty($signedoff)) {
-		debugPrint("No sign off found, check parents.");
+		debugPrint("No sign off found, checking the parents.");
 		$signedoff = find_signed_off_parents();
 	}
 
