@@ -32,7 +32,8 @@ try
 	if ($result !== '')
 	{
 		writeDebug('Found a valid sign off in commit: ' . $result);
-	} else {
+	} else
+	{
 		fwrite(STDERR, 'No valid sign off was found in your commit, please sign off commits.');
 	}
 
