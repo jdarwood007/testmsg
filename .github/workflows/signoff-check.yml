@@ -23,6 +23,7 @@ jobs:
         echo 'OUT<<EOF' >> $GITHUB_ENV
         echo "$(cat check-signed-off.txt)" >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
+        echo "\n"
         echo '====================check-signed-off======================'
         cat check-signed-off.txt
         echo '====================git log======================'
