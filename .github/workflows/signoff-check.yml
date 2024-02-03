@@ -20,15 +20,15 @@ jobs:
     - name: Run Script
       run: |
         php ./check-signed-off.php > check-signed-off.txt 2>&1
-        echo 'OUT<<EOF' >> $GITHUB_OUTPUT
-        echo "$(cat check-signed-off.txt)\n" >> $GITHUB_OUTPUT
-        echo 'EOF' >> $GITHUB_OUTPUT
+        echo 'OUT<<EOF' >> $GITHUB_ENV
+        echo "$(cat check-signed-off.txt)\n" >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
         echo '====================check-signed-off======================'
         cat check-signed-off.txt
         echo '====================git log======================'
         git --no-pager log -n2
         echo '=========================================='
-        echo 'SUCCESS=true' >> $GITHUB_OUTPUT
+        echo 'SUCCESS=true' >> $GITHUB_ENV
   
     - name: Post result to PR
       uses: mshick/add-pr-comment@v1
