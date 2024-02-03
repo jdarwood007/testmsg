@@ -34,7 +34,7 @@ jobs:
       uses: mshick/add-pr-comment@v1
       if: env.OUT != ''
       with:
-        message-path: ${{ env.OUT }}
+        message: ${{ env.OUT }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
         allow-repeats: true # This is the default
