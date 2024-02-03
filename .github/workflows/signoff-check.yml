@@ -21,7 +21,7 @@ jobs:
       run: |
         php ./check-signed-off.php > check-signed-off.txt 2>&1
         echo 'OUT<<EOF' >> $GITHUB_ENV
-        echo "$(cat check-signed-off.txt)\n" >> $GITHUB_ENV
+        echo "$(cat check-signed-off.txt)" >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
         echo '====================check-signed-off======================'
         cat check-signed-off.txt

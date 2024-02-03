@@ -37,7 +37,7 @@ try
 
 	// Nothing?  Well darn.
 	if (empty($signedoff)) {
-		fwrite(STDERR, 'Error: Signed-off-by not found in commit message');
+		fwrite(STDERR, 'Error: No valid Sign-off found.  Please Sign your commits.');
 		exit(0);
 	}
 
