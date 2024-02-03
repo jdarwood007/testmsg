@@ -20,7 +20,7 @@ jobs:
     - name: Run Script
       run: |
         php ./check-signed-off.php > check-signed-off.txt 2>&1
-        echo 'var<<EOF' >> $GITHUB_OUTPUT
+        echo 'OUT<<EOF' >> $GITHUB_OUTPUT
         echo "$(cat check-signed-off.txt)\n" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
         echo '====================check-signed-off======================'
@@ -28,18 +28,29 @@ jobs:
         echo '====================git log======================'
         git --no-pager log -n2
         echo '=========================================='
+        echo 'SUCCESS=true' >> $GITHUB_OUTPUT
   
     - name: Post result to PR
       uses: mshick/add-pr-comment@v1
-      if: env.GITHUB_OUTPUT != ''
+      if: env.OUT != ''
       with:
-        message-path: ${{ env.GITHUB_OUTPUT }}
+        message-path: ${{ env.OUT }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
         allow-repeats: true # This is the default
 
-    - name: Fail If we had a message
-      if: env.GITHUB_OUTPUT != ''
+    - name: Fail because we had output
+      if: env.OUT != ''
       run: |
-        echo "$env.GITHUB_OUTPUT"
+        exit 1
+
+    - name: Exit Clean because we passed
+      if: env.SUCCESS == 'true'
+      run: |
+        echo "$env.OUT"
+        exit 0
+
+    - name: Fail because we didn't quit
+      if: env.OUT == ''
+      run: |
         exit 1
