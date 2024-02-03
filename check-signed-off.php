@@ -37,6 +37,10 @@ if (DEBUG_MODE) {
 
 // Nothing?  Well darn.
 if (empty($signedoff)) {
+	if (DEBUG_MODE) {
+		debugPrint('Searched all locations and no signature found');
+	}
+
 	fwrite(STDERR, 'Error: Signed-off-by not found in commit message');
 	exit(1);
 }
@@ -104,7 +108,11 @@ function find_signed_off($commit = 'HEAD', $childs = array(), $level = 0) {
 		return find_signed_off($merges[1], array_merge([$merges[1]], $childs), ++$level);
 	}
 
-	return $result !== false;
+	if (DEBUG_MODE) {
+		debugPrint(($result ? 'Found signature for commit:' : 'Unable to find signature on commit: ') . $commit);
+	}
+
+	return $result;
 }
 
 // Find a commit by GPG
@@ -130,6 +138,10 @@ function find_gpg($commit = 'HEAD', $childs = [])
 		'message' => '"' . $message . '"',
 	];
 	debugPrint('Commit ' . $commit . ' at time ' . time() . ": " . rtrim(print_r($debugMsgs, true)));
+
+	if (DEBUG_MODE) {
+		debugPrint(($result ? 'Found GPG for commit:' : 'Unable to find GPG on commit: ') . $commit);
+	}
 
 	return $result;
 }
@@ -160,6 +172,10 @@ function find_signed_off_parents($commit = 'HEAD')
 		if (!empty($test)) {
 			return $test;
 		}
+	}
+
+	if (DEBUG_MODE) {
+		debugPrint('Searched yieled no results for parents of commit:' . $commit);
 	}
 
 	// Lucked out.
