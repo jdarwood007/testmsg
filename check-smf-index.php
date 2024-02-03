@@ -33,6 +33,7 @@ $errors = false;
 
 try
 {
+
 	$iter = new RecursiveIteratorIterator(
 		new RecursiveDirectoryIterator('.', RecursiveDirectoryIterator::SKIP_DOTS),
 		RecursiveIteratorIterator::SELF_FIRST,
