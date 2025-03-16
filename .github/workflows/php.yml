@@ -2,8 +2,6 @@ name: PHP Check
 
 on:
   push:
-    branches:
-      - release-3.0
   pull_request:
 
 jobs:
