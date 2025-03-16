@@ -2,8 +2,6 @@ name: PHP Check
 
 on:
   push:
-    branches:
-      - release-3.0
   pull_request:
 
 jobs:
@@ -41,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ 8.0, 8.1, 8.2, 8.3 ]
+        php: [ 8.0, 8.1, 8.2, 8.3, 8.4 ]
 
     name: PHP ${{ matrix.php }} Syntax Check
     steps:
@@ -55,7 +53,7 @@ jobs:
 
     - name: Cache Composer packages
       id: composer-cache
-      uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # 4.2.2
+      uses: actions/cache@cache@d4323d4df104b026a6aa633fdb11d772146be0bf # 4.2.2
       with:
         path: vendor
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
